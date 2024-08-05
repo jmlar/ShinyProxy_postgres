@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: FLDB
+    image: postgres:15.4
+    restart: always
+    environment:
+      POSTGRES_DB: FLVoteData 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: LotsOfData
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+
+  python:
+    image: john60/python:latest
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://myuser:mypassword@postgres:5432/mydatabase
+
+volumes:
+  postgres_volume:
+    external: true 
+
